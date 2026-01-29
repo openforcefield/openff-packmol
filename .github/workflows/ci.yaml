@@ -24,7 +24,11 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         environment: [
           py311-standalone,
+          py312-standalone,
+          py313-standalone,
           py311-ambertools,
+          py312-ambertools,
+          py313-ambertools,
           typing,
         ]
 
