@@ -1,0 +1,125 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=77.0.3",
+  "setuptools-scm>=8",
+]
+
+[project]
+name = "openff-packmol"
+description = "A Packmol wrapper using OpenFF objects"
+readme = "README.md"
+license = "MIT"
+license-files = [ "LICENSE" ]
+authors = [ { name = "Open Force Field Initiative", email = "info@openforcefield.org" } ]
+requires-python = ">=3.11"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+dynamic = [ "version" ]
+
+[tool.setuptools.packages]
+find = {}
+
+[tool.setuptools_scm]
+fallback_version = "0.0.0"
+
+[tool.ruff]
+line-length = 119
+namespace-packages = [ "openff/packmol/" ]
+
+lint.select = [ "E", "F", "I", "NPY", "RUF", "UP", "W" ]
+lint.per-file-ignores."openff/packmol/__init__.py" = [ "F401" ]
+
+[tool.pytest.ini_options]
+addopts = "-n logical -x --cov=openff/packmol --cov-report=xml"
+
+[tool.coverage.run]
+omit = [
+  "*/*/_tests/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "if TYPE_CHECKING:",
+  "raise NotImplementedError",
+  "@overload",
+]
+
+[tool.mypy]
+exclude = "openff/packmol/_tests"
+python_version = "3.11"
+warn_unused_configs = true
+warn_unused_ignores = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+  "openff.toolkit",
+]
+ignore_missing_imports = true
+
+[tool.pixi.workspace]
+channels = [ "conda-forge" ]
+platforms = [ "linux-64", "osx-arm64" ]
+
+[tool.pixi.tasks]
+run_tests = { cmd = "pytest $COV openff/packmol/" }
+run_mypy = { cmd = "python -m mypy -p 'openff.packmol'" }
+
+[tool.pixi.dependencies]
+python = "*"
+pip = "*"
+setuptools-scm = "*"
+openff-toolkit-base = "*"
+openff-utilities = "*"
+numpy = "*"
+scipy = "*"
+packaging = "*"
+
+[tool.pixi.pypi-dependencies]
+openff-packmol = { path = ".", editable = true }
+
+[tool.pixi.feature.test.dependencies]
+pytest = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+pytest-randomly = "*"
+rdkit = "*"
+openmm = "*"
+
+[tool.pixi.feature.typing.dependencies]
+mypy = "*"
+scipy-stubs = "*"
+
+[tool.pixi.feature.standalone.dependencies]
+packmol = "*"
+
+[tool.pixi.feature.ambertools.dependencies]
+ambertools = ">=24.8"
+numpy = "2.2.*"       # ParmEd bugs
+
+[tool.pixi.feature.dev.dependencies]
+pre-commit = "*"
+
+[tool.pixi.feature.py311.dependencies]
+python = "3.11.*"
+[tool.pixi.feature.py312.dependencies]
+python = "3.12.*"
+[tool.pixi.feature.py313.dependencies]
+python = "3.13.*"
+
+[tool.pixi.environments]
+py311-standalone = [ "py311", "test", "standalone" ]
+py312-standalone = [ "py312", "test", "standalone" ]
+py313-standalone = [ "py313", "test", "standalone" ]
+py311-ambertools = [ "py311", "test", "ambertools" ]
+py312-ambertools = [ "py312", "test", "ambertools" ]
+py313-ambertools = [ "py313", "test", "ambertools" ]
+dev = [ "py313", "dev" ]
+typing = [ "py313", "typing" ]

@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+  schedule:
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: pixi run bash -e {0}
+
+jobs:
+  test:
+    name: ${{ matrix.os }}, 🐍=${{ matrix.environment}}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        environment: [
+          py311-standalone,
+          py311-ambertools,
+          typing,
+        ]
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Set up environment with pixi
+      if: matrix.mamba-executable == 'pixi'
+      uses: prefix-dev/setup-pixi@v0.9.4
+      with:
+        environments: ${{ matrix.environment }}
+        activate-environment: ${{ matrix.environment }}
+        frozen: true
+
+    - name: Run a test with OpenEye toolkits installed but NOT licensed
+      if: ${{ contains(matrix.environment, 'openeye') }}
+      run: pixi run run_edge_case
+
+    - name: Run mypy
+      if: ${{ matrix.environment == 'typing' }}
+      run: pixi run run_mypy
+
+    - name: Run unit tests
+      if: ${{ matrix.environment != 'typing' }}
+      run: pixi run run_tests
+
+    - name: Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.xml
