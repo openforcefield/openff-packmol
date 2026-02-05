@@ -8,8 +8,13 @@ A Packmol wrapper using OpenFF objects
 
 ### Copyright
 
-Copyright (c) 2021, The Open Force Field Initiative
+Copyright (c) 2026, The Open Force Field Initiative
 
+### License
+
+This software is released under the MIT license. See [`LICENSE`](LICENSE) for more information.
+
+This software derives in part from other work distributed under other licenses. See [`LICENSE-3RD-PARTY`](LICENSE-3RD-PARTY.md) for more information.
 
 #### Acknowledgements
 
