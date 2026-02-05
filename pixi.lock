@@ -6296,8 +6296,8 @@ packages:
   timestamp: 1768284405101
 - pypi: ./
   name: openff-packmol
-  version: 0.0.1.dev0+d20260129
-  sha256: 4cd0bd752ce52518e2deb316416ce5cdcebf1986007838952f4389939d572665
+  version: 0.0.1.dev4+gaf2809182.d20260205
+  sha256: 70df805a44613c00927a8b79f992e04ff6fd776dc216a23503cd51a261f7bee4
   requires_python: '>=3.11'
 - conda: https://conda.anaconda.org/conda-forge/noarch/openff-toolkit-base-0.11.2-pyhd8ed1ab_1.tar.bz2
   sha256: 2bf1dc4c12c56b3b1c555ba3df7f4fab38d98be4a411a7a9476a25be8afc81f4
