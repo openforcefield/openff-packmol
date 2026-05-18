@@ -3,9 +3,11 @@ A wrapper around PACKMOL. Adapted from OpenFF Evaluator v0.4.3.
 """
 
 import os
+import pathlib
 import shutil
 import subprocess
 import tempfile
+import uuid
 from collections.abc import Callable
 from copy import deepcopy
 from typing import Literal
@@ -65,6 +67,10 @@ spherical solute, or equivalently for a solute whose rotations sweep out a
 sphere. A hexagonal intersection with the XY plane is convenient for membrane
 simulations,
 """
+
+
+def get_uuid():
+    return uuid.uuid4().hex
 
 
 def _find_packmol() -> str | None:
@@ -407,7 +413,7 @@ def _create_solute_pdb(
         ),
     )
     # Write to pdb
-    solute_pdb_filename = "_PACKING_SOLUTE.pdb"
+    solute_pdb_filename = f"_PACKING_SOLUTE_{get_uuid()}.pdb"
     topology.to_file(
         solute_pdb_filename,
         file_format="PDB",
@@ -511,7 +517,7 @@ def _build_input_file(
     tolerance = tolerance.m_as("angstrom")
 
     # Add the global header options.
-    output_file_path = "packmol_output.pdb"
+    output_file_path = f"OUT_{get_uuid()}.pdb"
     input_lines = [
         f"tolerance {tolerance:f}",
         "filetype pdb",
