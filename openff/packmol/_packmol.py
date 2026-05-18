@@ -3,7 +3,6 @@ A wrapper around PACKMOL. Adapted from OpenFF Evaluator v0.4.3.
 """
 
 import os
-import pathlib
 import shutil
 import subprocess
 import tempfile
