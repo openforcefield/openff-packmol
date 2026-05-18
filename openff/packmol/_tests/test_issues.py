@@ -20,7 +20,7 @@ def test_thread_safety(water):
             target=pack_box,
             args=(
                 [water],
-                [i],
+                [100 + i],
                 None,
                 Quantity(0.2, "nanometer"),
                 None,
