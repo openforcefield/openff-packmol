@@ -516,8 +516,9 @@ def _build_input_file(
     box_size = box_size.m_as("angstrom") if PACKMOL_USE_PBC else (box_size - tolerance).m_as("angstrom")
     tolerance = tolerance.m_as("angstrom")
 
+    this_id = get_uuid()
     # Add the global header options.
-    output_file_path = f"OUT_{get_uuid()}.pdb"
+    output_file_path = f"OUT_{this_id}.pdb"
     input_lines = [
         f"tolerance {tolerance:f}",
         "filetype pdb",
@@ -555,10 +556,11 @@ def _build_input_file(
             ],
         )
 
+    print(f"{input_lines=}")
     packmol_input = "\n".join(input_lines)
 
     # Write packmol input
-    packmol_file_name = "packmol_input.txt"
+    packmol_file_name = f"packmol_input_{this_id}.txt"
 
     with open(packmol_file_name, "w") as file_handle:
         file_handle.write(packmol_input)
@@ -754,6 +756,12 @@ def pack_box(
         os.makedirs(working_directory, exist_ok=True)
 
     with temporary_cd(working_directory):
+        path = pathlib.Path(".")
+
+        # List only items that are files
+        files = [f for f in path.iterdir() if f.is_file()]
+        print(f"Working directory: {path.resolve()}")
+        print(f"{files=}")
         solute_pdb_filename = _create_solute_pdb(
             solute,
             box_vectors,
@@ -787,7 +795,9 @@ def pack_box(
                 raise PACKMOLRuntimeError(
                     f"PACKMOL failed with error code {error.returncode}. Wrote file packmol_error.log in working "
                     "directory, which might be a temporary directory. Set the argument `working_directory` to "
-                    "point this to a persistent path.",
+                    "point this to a persistent path. "
+                    + f"\nPackmol input was:\n{open(input_file_path).read()}\n"
+                    + f"\nPackmol output was:\n{error.stdout.decode('utf-8')}",
                 ) from error
 
             packmol_succeeded = result.decode("utf-8").find("Success!") > 0
@@ -798,6 +808,10 @@ def pack_box(
                 "Please raise an issue showing how you arrived at this error.",
             )
 
+        assert pathlib.Path(output_file_path).exists(), (
+            f"PACKMOL reported success but output file ({output_file_path}) not found. "
+            f"Files in this directory are: {list(pathlib.Path('.').iterdir())}. "
+        )
         positions = _load_positions(output_file_path)
 
     # TODO: This currently does not run if we encountered an error in the
