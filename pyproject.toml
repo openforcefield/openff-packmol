@@ -35,7 +35,7 @@ namespace-packages = [ "openff/packmol/" ]
 lint.select = [ "E", "F", "I", "NPY", "RUF", "UP", "W" ]
 
 [tool.pytest.ini_options]
-addopts = "-n logical -x --cov=openff/packmol --cov-report=xml"
+addopts = "-n logical -x --cov=openff/packmol/ --cov-report=xml"
 
 [tool.coverage.run]
 omit = [
@@ -105,6 +105,8 @@ numpy = "2.2.*"       # ParmEd bugs
 
 [tool.pixi.feature.dev.dependencies]
 pre-commit = "*"
+ipython = "*"
+ipdb = "*"
 
 [tool.pixi.feature.py311.dependencies]
 python = "3.11.*"
@@ -120,5 +122,5 @@ py313-standalone = [ "py313", "test", "standalone" ]
 py311-ambertools = [ "py311", "test", "ambertools" ]
 py312-ambertools = [ "py312", "test", "ambertools" ]
 py313-ambertools = [ "py313", "test", "ambertools" ]
-dev = [ "py313", "dev" ]
+dev = [ "py313", "test", "dev" ]
 typing = [ "py313", "typing" ]
