@@ -70,12 +70,12 @@ lint.select = [ "E", "F", "I", "NPY", "RUF", "UP", "W" ]
 [tool.mypy]
 exclude = "openff/packmol/_tests"
 python_version = "3.12"
-warn_unused_configs = true
 warn_unused_ignores = true
-show_error_codes = true
+warn_unused_configs = true
 overrides = [ { module = [
   "openff.toolkit",
 ], ignore_missing_imports = true } ]
+show_error_codes = true
 
 [tool.pytest]
 ini_options.addopts = "-n logical -x --cov=openff/packmol --cov-report=xml"
