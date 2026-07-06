@@ -12,10 +12,9 @@ readme = "README.md"
 license = "MIT"
 license-files = [ "LICENSE" ]
 authors = [ { name = "Open Force Field Initiative", email = "info@openforcefield.org" } ]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -45,7 +44,6 @@ tasks.run_tests = { cmd = "pytest $COV openff/packmol/" }
 feature.ambertools.dependencies.ambertools = ">=24.8"
 feature.ambertools.dependencies.numpy = "2.2.*"  # ParmEd bugs
 feature.dev.dependencies.pre-commit = "*"
-feature.py311.dependencies.python = "3.11.*"
 feature.py312.dependencies.python = "3.12.*"
 feature.py313.dependencies.python = "3.13.*"
 feature.standalone.dependencies.packmol = "*"
@@ -58,8 +56,6 @@ feature.test.dependencies.rdkit = "*"
 feature.typing.dependencies.mypy = "*"
 feature.typing.dependencies.scipy-stubs = "*"
 environments.dev = [ "py313", "dev" ]
-environments.py311-ambertools = [ "py311", "test", "ambertools" ]
-environments.py311-standalone = [ "py311", "test", "standalone" ]
 environments.py312-ambertools = [ "py312", "test", "ambertools" ]
 environments.py312-standalone = [ "py312", "test", "standalone" ]
 environments.py313-ambertools = [ "py313", "test", "ambertools" ]
@@ -73,7 +69,7 @@ lint.select = [ "E", "F", "I", "NPY", "RUF", "UP", "W" ]
 
 [tool.mypy]
 exclude = "openff/packmol/_tests"
-python_version = "3.11"
+python_version = "3.12"
 warn_unused_ignores = true
 warn_unused_configs = true
 overrides = [ { module = [
