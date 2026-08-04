@@ -126,6 +126,8 @@ def _validate_inputs(
         The shape of the simulation box, used in conjunction with the
         `target_density` parameter. Should have shape (3, 3) with all positive
         elements.
+    seed
+        The random number generator seed to use for packmol. If `None`, a random seed will be used.
 
     """
     if box_vectors is None and target_density is None and (solute is None or solute.box_vectors is None):
@@ -655,6 +657,8 @@ def pack_box(
         the solute will centered at the origin. If ``"brick"``, the solute will
         be centered in the box's rectangular brick representation. If
         ``False`` (the default), the solute will not be moved.
+    seed
+        The random number generator seed to use for packmol. If `None`, a random seed will be used.
     working_directory
         The directory in which to generate the temporary working files. If
         ``None``, a temporary one will be created.
@@ -922,6 +926,11 @@ def solvate_topology(
         structure of proteins; when constructing a mixture of small molecules,
         values as small as 0.5 Å will converge faster and can still produce
         stable simulations after energy minimisation.
+    seed
+        The random number generator seed to use for packmol. If `None`, a random seed will be used.
+    working_directory
+        The directory in which to generate the temporary working files. If
+        ``None``, a temporary one will be created.
 
     Returns
     -------
@@ -1100,6 +1109,10 @@ def solvate_topology_nonwater(
         structure of proteins; when constructing a mixture of small molecules,
         values as small as 0.5 Å will converge faster and can still produce
         stable simulations after energy minimisation.
+    seed
+        The random number generator seed to use for packmol. If `None`, a random seed will be used.
+    working_directory
+        The directory in which to generate the temporary working files. If
 
     Returns
     -------
