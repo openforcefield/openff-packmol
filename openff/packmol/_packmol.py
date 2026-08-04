@@ -3,6 +3,7 @@ A wrapper around PACKMOL. Adapted from OpenFF Evaluator v0.4.3.
 """
 
 import os
+import random
 import shutil
 import subprocess
 import tempfile
@@ -101,6 +102,7 @@ def _validate_inputs(
     box_shape: NDArray,
     box_vectors: Quantity | None,
     target_density: Quantity | None,
+    seed: int | None = None,
 ):
     """
     Validate the inputs which were passed to the main pack method.
@@ -167,6 +169,9 @@ def _validate_inputs(
             raise PACKMOLValueError(
                 "`solute` missing some atomic positions.",
             )
+
+    if type(seed) not in (int, type(None)):
+        raise PACKMOLValueError(f"`seed` must be an int or None, not {type(seed)}")
 
 
 def _box_vectors_are_in_reduced_form(box_vectors: Quantity) -> bool:
@@ -473,6 +478,7 @@ def _build_input_file(
     structure_to_solvate: str | None,
     box_size: Quantity,
     tolerance: Quantity,
+    seed: int | None = None,
     rectangular: bool = False,
 ) -> tuple[str, str]:
     """
@@ -516,6 +522,7 @@ def _build_input_file(
         f"tolerance {tolerance:f}",
         "filetype pdb",
         f"output {output_file_path}",
+        f"seed {seed:d}",
         "",
     ]
 
@@ -601,6 +608,7 @@ def pack_box(
     target_density: Quantity | None = None,
     box_shape: ArrayLike = RHOMBIC_DODECAHEDRON,
     center_solute: bool | Literal["BOX_VECS", "ORIGIN", "BRICK"] = False,
+    seed: int | None = None,
     working_directory: str | None = None,
     retain_working_files: bool = True,
 ) -> Topology:
@@ -690,6 +698,13 @@ def pack_box(
     if packmol_path is None:
         raise OSError("Packmol not found, cannot run pack_box()")
 
+    if seed is None:
+        # Fortran 90 seems to cap out of 32 bits, which should be large enough
+        # https://github.com/m3g/packmol/blob/v21.2.3/src/input.f90#L16
+        seed = random.getrandbits(16)
+
+    assert seed is not None
+
     box_shape = numpy.asarray(box_shape)
     if box_shape.shape == (3,):
         box_shape = box_shape * numpy.identity(3)
@@ -702,6 +717,7 @@ def pack_box(
         box_shape,
         box_vectors,
         target_density,
+        seed,
     )
 
     is_rectangular = bool(numpy.all(box_shape == numpy.diag(numpy.diagonal(box_shape))))
@@ -763,6 +779,7 @@ def pack_box(
             solute_pdb_filename,
             brick_size,
             tolerance,
+            seed,
             rectangular=is_rectangular,
         )
 
@@ -869,6 +886,7 @@ def solvate_topology(
     box_shape: NDArray = RHOMBIC_DODECAHEDRON,
     target_density: Quantity = Quantity(0.9, "gram / milliliter"),
     tolerance: Quantity = Quantity(0.2, "nanometer"),
+    seed: int | None = None,
     working_directory: str | None = None,
 ) -> Topology:
     """
@@ -1039,6 +1057,7 @@ def solvate_topology(
         solute=topology,
         tolerance=tolerance,
         box_vectors=box_vectors,
+        seed=seed,
         working_directory=working_directory,
     )
 
@@ -1050,6 +1069,7 @@ def solvate_topology_nonwater(
     padding: Quantity | None = Quantity(1.2, "nanometer"),
     box_shape: NDArray = RHOMBIC_DODECAHEDRON,
     tolerance: Quantity = Quantity(0.2, "nanometer"),
+    seed: int | None = None,
     working_directory: str | None = None,
 ) -> Topology:
     """
@@ -1158,5 +1178,6 @@ def solvate_topology_nonwater(
         tolerance=tolerance,
         box_vectors=box_vectors,
         center_solute=True,
+        seed=seed,
         working_directory=working_directory,
     )

@@ -575,3 +575,55 @@ class TestPackmolWrapper:
             packed_topology2.box_vectors.m_as("nanometer").diagonal(),
             [2.123, 2.123, 2.123],
         )
+
+    def test_call_twice_same_seed_same_result(self, water):
+        """
+        Test that calling pack_box twice with the same seed produces the same result,
+        including positions matching.
+        """
+        box_vectors = Quantity(20 * numpy.identity(3), "angstrom")
+
+        topology1 = pack_box(
+            [water],
+            [10],
+            box_vectors=box_vectors,
+            seed=12345,
+        )
+
+        topology2 = pack_box(
+            [water],
+            [10],
+            box_vectors=box_vectors,
+            seed=12345,
+        )
+
+        assert topology1.n_atoms == topology2.n_atoms
+        assert topology1.n_bonds == topology2.n_bonds
+        assert numpy.allclose(topology1.box_vectors.m, topology2.box_vectors.m)
+        assert numpy.allclose(topology1.get_positions().m, topology2.get_positions().m)
+
+    def test_call_twice_different_seed_different_positions(self, water):
+        """
+        Test that calling pack_box twice with different seeds produces different positions
+        but identical numbers of molecules/atoms/bonds.
+        """
+        box_vectors = Quantity(20 * numpy.identity(3), "angstrom")
+
+        topology1 = pack_box(
+            [water],
+            [10],
+            box_vectors=box_vectors,
+            seed=12345,
+        )
+
+        topology2 = pack_box(
+            [water],
+            [10],
+            box_vectors=box_vectors,
+            seed=77777,
+        )
+
+        assert topology1.n_atoms == topology2.n_atoms
+        assert topology1.n_bonds == topology2.n_bonds
+        assert numpy.allclose(topology1.box_vectors.m, topology2.box_vectors.m)
+        assert not numpy.allclose(topology1.get_positions().m, topology2.get_positions().m)
