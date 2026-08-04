@@ -576,6 +576,29 @@ class TestPackmolWrapper:
             [2.123, 2.123, 2.123],
         )
 
+    @pytest.mark.parametrize("use_seed", [True, False])
+    def test_basic_usage_with_without_seed(self, molecules, use_seed):
+        topology = pack_box(
+            molecules,
+            [10],
+            box_vectors=Quantity(20 * numpy.identity(3), "angstrom"),
+            seed=55555 if use_seed else None,
+        )
+
+        assert topology is not None
+
+    def test_seed_bad_type(self, molecules):
+        with pytest.raises(
+            PACKMOLValueError,
+            match=r"`seed` must be an int or None.*str",
+        ):
+            pack_box(
+                molecules,
+                [10],
+                box_vectors=Quantity(20 * numpy.identity(3), "angstrom"),
+                seed="pick a good one pls",
+            )
+
     def test_call_twice_same_seed_same_result(self, water):
         """
         Test that calling pack_box twice with the same seed produces the same result,
