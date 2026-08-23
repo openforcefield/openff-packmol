@@ -1112,7 +1112,7 @@ def solvate_topology_nonwater(
     seed
         The random number generator seed to use for packmol. If `None`, a random seed will be used.
     working_directory
-        The directory in which to generate the temporary working files. If
+        The directory in which to generate the temporary working files.
 
     Returns
     -------
