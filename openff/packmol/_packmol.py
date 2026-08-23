@@ -499,6 +499,8 @@ def _build_input_file(
         size of the rectangular brick representation of the simulation box
     tolerance
         The packmol convergence tolerance.
+    seed
+        The random number generator seed to use for packmol. If `None`, a random seed will be used.
     rectangular
         Whether the box is rectangular (True) or triclinic (False).
 
