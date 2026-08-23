@@ -575,3 +575,56 @@ class TestPackmolWrapper:
             packed_topology2.box_vectors.m_as("nanometer").diagonal(),
             [2.123, 2.123, 2.123],
         )
+
+    @pytest.mark.parametrize("use_seed", [True, False])
+    def test_basic_usage_with_without_seed(self, molecules, use_seed):
+        topology = pack_box(
+            molecules,
+            [10],
+            box_vectors=Quantity(20 * numpy.identity(3), "angstrom"),
+            seed=55555 if use_seed else None,
+        )
+
+        assert topology is not None
+
+    def test_seed_bad_type(self, molecules):
+        with pytest.raises(
+            PACKMOLValueError,
+            match=r"`seed` must be an int or None.*str",
+        ):
+            pack_box(
+                molecules,
+                [10],
+                box_vectors=Quantity(20 * numpy.identity(3), "angstrom"),
+                seed="pick a good one pls",
+            )
+
+    @pytest.mark.parametrize("same_seed", [False, True])
+    def test_call_twice_same_seed_same_result(self, water, same_seed):
+        """
+        Test that calling pack_box twice with the same seed produces the same result
+        and different results if the seed is different, but identical box vectors
+        and topology (molecules, number of molecules, etc.) in both cases.
+        """
+        box_vectors = Quantity(20 * numpy.identity(3), "angstrom")
+
+        topology1 = pack_box(
+            [water],
+            [10],
+            box_vectors=box_vectors,
+            seed=12345,
+        )
+
+        topology2 = pack_box(
+            [water],
+            [10],
+            box_vectors=box_vectors,
+            seed=12345 if same_seed else 77777,
+        )
+
+        assert topology1.n_atoms == topology2.n_atoms
+        assert topology1.n_bonds == topology2.n_bonds
+        assert numpy.allclose(topology1.box_vectors.m, topology2.box_vectors.m)
+
+        # positions are the same if the seed is the same, different if the seed is different
+        assert same_seed == numpy.allclose(topology1.get_positions().m, topology2.get_positions().m)
