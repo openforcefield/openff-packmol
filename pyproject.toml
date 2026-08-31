@@ -73,8 +73,8 @@ python_version = "3.12"
 warn_unused_ignores = true
 warn_unused_configs = true
 overrides = [ { module = [
-  "openff.toolkit",
-], ignore_missing_imports = true } ]
+    "openff.toolkit",
+  ], ignore_missing_imports = true } ]
 show_error_codes = true
 
 [tool.pytest]
