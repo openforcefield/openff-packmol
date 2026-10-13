@@ -41,8 +41,7 @@ dependencies.setuptools-scm = "*"
 pypi-dependencies.openff-packmol = { path = ".", editable = true }
 tasks.run_mypy = { cmd = "python -m mypy -p 'openff.packmol'" }
 tasks.run_tests = { cmd = "pytest $COV openff/packmol/" }
-feature.ambertools.dependencies.ambertools = ">=24.8"
-feature.ambertools.dependencies.numpy = "2.2.*"  # ParmEd bugs
+feature.ambertools.dependencies.ambertools = "=24.8"
 feature.dev.dependencies.pre-commit = "*"
 feature.py312.dependencies.python = "3.12.*"
 feature.py313.dependencies.python = "3.13.*"
