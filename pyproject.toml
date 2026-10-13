@@ -45,7 +45,8 @@ feature.ambertools.dependencies.ambertools = "=24.8"
 feature.dev.dependencies.pre-commit = "*"
 feature.py312.dependencies.python = "3.12.*"
 feature.py313.dependencies.python = "3.13.*"
-feature.standalone.dependencies.packmol = "*"
+feature.standalone20.dependencies.packmol = "20.*"
+feature.standalone21plus.dependencies.packmol = ">=21"
 feature.test.dependencies.openmm = "*"
 feature.test.dependencies.pytest = "*"
 feature.test.dependencies.pytest-cov = "*"
@@ -56,9 +57,11 @@ feature.typing.dependencies.mypy = "*"
 feature.typing.dependencies.scipy-stubs = "*"
 environments.dev = [ "py313", "dev" ]
 environments.py312-ambertools = [ "py312", "test", "ambertools" ]
-environments.py312-standalone = [ "py312", "test", "standalone" ]
+environments.py312-standalone20 = [ "py312", "test", "standalone20" ]
+environments.py312-standalone21plus = [ "py312", "test", "standalone21plus" ]
 environments.py313-ambertools = [ "py313", "test", "ambertools" ]
-environments.py313-standalone = [ "py313", "test", "standalone" ]
+environments.py313-standalone20 = [ "py313", "test", "standalone20" ]
+environments.py313-standalone21plus = [ "py313", "test", "standalone21plus" ]
 environments.typing = [ "py313", "typing" ]
 
 [tool.ruff]

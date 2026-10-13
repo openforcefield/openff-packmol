@@ -24,8 +24,10 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         environment: [
-          py312-standalone,
-          py313-standalone,
+          py312-standalone20,
+          py313-standalone20,
+          py312-standalone21plus,
+          py313-standalone21plus,
           py312-ambertools,
           py313-ambertools,
           typing,
