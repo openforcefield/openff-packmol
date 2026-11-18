@@ -530,6 +530,8 @@ def _build_input_file(
         "filetype pdb",
         f"output {output_file_path}",
         f"seed {seed:d}",
+        "maxit 10",
+        "nloop 10",
         "",
     ]
 

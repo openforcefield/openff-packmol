@@ -37,6 +37,12 @@ packmol = "20.*"
 [feature.standalone21plus.dependencies]
 packmol = ">=21"
 
+# [feature.v100.pypi-options.dependency-overrides]
+# packmol = "=100.*"
+
+[feature.v100.pypi-dependencies]
+packmol = "==100.*"
+
 [feature.test.dependencies]
 openmm = "*"
 pytest = "*"
@@ -44,6 +50,7 @@ pytest-cov = "*"
 pytest-randomly = "*"
 pytest-xdist = "*"
 rdkit = "*"
+pytest-timeout = "*"
 
 [feature.typing.dependencies]
 mypy = "*"
@@ -57,4 +64,5 @@ py312-standalone21plus = ["py312", "test", "standalone21plus"]
 py313-ambertools = ["py313", "test", "ambertools"]
 py313-standalone20 = ["py313", "test", "standalone20"]
 py313-standalone21plus = ["py313", "test", "standalone21plus"]
+py312-v100 = ["py312", "test", "v100"]
 typing = ["py313", "typing"]
