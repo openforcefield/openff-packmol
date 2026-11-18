@@ -9,6 +9,7 @@ import numpy
 import pytest
 from openff.toolkit import Molecule, Quantity
 from openff.utilities import has_package, skip_if_missing
+from packaging.version import Version
 
 from openff.packmol._packmol import (
     RHOMBIC_DODECAHEDRON,
@@ -16,6 +17,7 @@ from openff.packmol._packmol import (
     UNIT_CUBE,
     _compute_brick_from_box_vectors,
     _find_packmol,
+    _get_packmol_version,
     _scale_box,
     pack_box,
     solvate_topology,
@@ -440,6 +442,9 @@ class TestPackmolWrapper:
 
     @pytest.mark.parametrize("use_local_path", [False, True])
     def test_save_error_on_convergence_failure(self, use_local_path):
+        if _get_packmol_version() >= Version("100.0.0"):
+            pytest.skip("Packmol version 100+ has different error reporting")
+
         with pytest.raises(
             PACKMOLRuntimeError,
             match="failed with error code 173",
