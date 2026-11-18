@@ -1,0 +1,60 @@
+[workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-arm64"]
+
+[dependencies]
+numpy = "*"
+openff-toolkit-base = "*"
+openff-utilities = "*"
+packaging = "*"
+pip = "*"
+python = "*"
+scipy = "*"
+setuptools-scm = "*"
+
+[pypi-dependencies]
+openff-packmol = { path = ".", editable = true }
+
+[tasks]
+run_mypy = { cmd = "python -m mypy -p 'openff.packmol'" }
+run_tests = { cmd = "pytest $COV openff/packmol/" }
+
+[feature.ambertools.dependencies]
+ambertools = "=24.8"
+
+[feature.dev.dependencies]
+pre-commit = "*"
+
+[feature.py312.dependencies]
+python = "3.12.*"
+
+[feature.py313.dependencies]
+python = "3.13.*"
+
+[feature.standalone20.dependencies]
+packmol = "20.*"
+
+[feature.standalone21plus.dependencies]
+packmol = ">=21"
+
+[feature.test.dependencies]
+openmm = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-randomly = "*"
+pytest-xdist = "*"
+rdkit = "*"
+
+[feature.typing.dependencies]
+mypy = "*"
+scipy-stubs = "*"
+
+[environments]
+dev = ["py313", "dev"]
+py312-ambertools = ["py312", "test", "ambertools"]
+py312-standalone20 = ["py312", "test", "standalone20"]
+py312-standalone21plus = ["py312", "test", "standalone21plus"]
+py313-ambertools = ["py313", "test", "ambertools"]
+py313-standalone20 = ["py313", "test", "standalone20"]
+py313-standalone21plus = ["py313", "test", "standalone21plus"]
+typing = ["py313", "typing"]
