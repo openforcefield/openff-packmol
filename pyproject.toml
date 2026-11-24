@@ -21,6 +21,21 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dynamic = [ "version" ]
+dependencies = [
+  "numpy",
+  "openff-toolkit>=0.18",
+  "packaging",
+  "packmol>=20,<100",
+  "scipy",
+]
+optional-dependencies.test = [
+  "openmm",
+  "pytest>=6",
+  "pytest-cov>=3",
+  "pytest-randomly",
+  "pytest-xdist>=2.5",
+  "rdkit",
+]
 
 [tool.setuptools.packages.find]
 include = [ 'openff.packmol*' ]
